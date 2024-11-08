@@ -18,6 +18,12 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
+    public Customer getCustomer(Integer id){
+        Optional<Customer> customer = customerRepository.findById(id);
+        if(customer.isPresent()) return customer.get();
+        return null;
+    }
+
     public void addCustomer(CustomerDTO customerDTO){
         Optional<Customer> customerOptional = customerRepository.findByEmail(customerDTO.email());
         if(!customerOptional.isPresent())
