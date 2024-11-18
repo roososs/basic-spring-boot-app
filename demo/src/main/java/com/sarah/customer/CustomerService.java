@@ -1,6 +1,9 @@
 package com.sarah.customer;
 
+import com.sarah.exception.ResourceAlreadyExistsException;
+import com.sarah.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,37 +22,34 @@ public class CustomerService {
     }
 
     public Customer getCustomer(Integer id){
-        Optional<Customer> customer = customerRepository.findById(id);
-        if(customer.isPresent()) return customer.get();
-        return null;
+        return customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer with id " + id + " not found"));
     }
 
     public void addCustomer(CustomerDTO customerDTO){
-        Optional<Customer> customerOptional = customerRepository.findByEmail(customerDTO.email());
-        if(!customerOptional.isPresent())
-        {   Customer customer = new Customer();
-            customer.setName(customerDTO.name());
-            customer.setEmail(customerDTO.email());
-            customer.setAge(customerDTO.age());
-            customerRepository.save(customer);}
+        customerRepository.findByEmail(customerDTO.email()).ifPresent(customer -> {
+                    throw new ResourceAlreadyExistsException("Customer with email " + customerDTO.email() + " already exists");
+                });
+        Customer customer = new Customer();
+        customer.setName(customerDTO.name());
+        customer.setEmail(customerDTO.email());
+        customer.setAge(customerDTO.age());
+        customerRepository.save(customer);
     }
 
     public void deleteCustomer(Integer id){
-        Optional<Customer> customer = customerRepository.findById(id);
-        if(customer.isPresent())
-        {customerRepository.delete(customer.get());}
+        Customer customer = customerRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Customer with id " + id + " not found"));
+        customerRepository.delete(customer);
     }
 
     public void updateCustomer(Integer id, CustomerDTO customerDTO){
-        Optional<Customer> customerOptional = customerRepository.findById(id);
+        Customer customer = customerRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Customer with id " + id + " not found"));
+        customer.setName(customerDTO.name());
+        customer.setEmail(customerDTO.email());
+        customer.setAge(customerDTO.age());
+        customerRepository.save(customer);
 
-        if(customerOptional.isPresent()){
-            Customer customer = customerOptional.get();
-            customer.setName(customerDTO.name());
-            customer.setEmail(customerDTO.email());
-            customer.setAge(customerDTO.age());
-            customerRepository.save(customer);
-        }
     }
 
 }

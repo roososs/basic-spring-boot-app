@@ -30,18 +30,18 @@ public class CustomerController {
     @PostMapping("")
     public ResponseEntity<String> addCustomer(@RequestBody CustomerDTO customerDTO) {
         customerService.addCustomer(customerDTO);
-        return new ResponseEntity<>("Customer Created Successfully",HttpStatus.CREATED);
+        return new ResponseEntity<>("Customer created Successfully",HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCustomer(@PathVariable Integer id) {
         customerService.deleteCustomer(id);
-        return new ResponseEntity<>("Customer deleted successfully", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Customer deleted successfully", HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<String> updateCustomer(@PathVariable Integer id, @RequestBody CustomerDTO customerDTO) {
         customerService.updateCustomer(id,customerDTO);
-        return new ResponseEntity<>("Customer updated successfully", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Customer updated successfully", HttpStatus.OK);
     }
 }
