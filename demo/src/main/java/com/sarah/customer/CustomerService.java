@@ -3,7 +3,6 @@ package com.sarah.customer;
 import com.sarah.exception.ResourceAlreadyExistsException;
 import com.sarah.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
